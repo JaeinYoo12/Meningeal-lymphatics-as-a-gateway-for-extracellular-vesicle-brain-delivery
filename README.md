@@ -1,8 +1,6 @@
 # Meningeal-lymphatics-as-a-gateway-for-extracellular-vesicle-brain-delivery
 
-# [Project Title: Meningeal-lymphatics-as-a-gateway-for-extracellular-vesicle-brain-delivery]
-
-This repository contains the standalone R scripts used for the analysis in the manuscript "[Meningeal-lymphatics-as-a-gateway-for-extracellular-vesicle-brain-delivery".
+This repository contains the standalone R scripts used for the analysis in the manuscript "Meningeal-lymphatics-as-a-gateway-for-extracellular-vesicle-brain-delivery".
 
 ## 1. System Requirements
 
@@ -11,14 +9,12 @@ This script requires a standard computer with enough RAM to support the in-memor
 * **Minimum:** 32 GB RAM
 * **Recommended for full dataset:** 125+ GB RAM (or HPC environment)
 
+The scripts have been specifically tested on the following system configuration:
+* **OS:** Linux Rocky Linux release 8.10 (Green Obsidian)
+* **RAM:** 128 GB
+* **CPU:** AMD Ryzen Threadripper PRO 5995WX 64-Cores
+
 ### Software requirements
-The scripts have been tested on the following operating systems:
-* Linux: [Rocky Linux release 8.10 (Green Obsidian)]
-* RAM: 128 GB
-* CPU: AMD Ryzen Threadripper PRO 5995WX 64-Cores
-
-**Tested R version:** R version [v4.5.1]
-
 #### R Dependencies
 This software has been tested on **R version 4.5.1**.
 The core scripts require the following R packages. The versions the software has been tested on are listed below:
@@ -54,7 +50,8 @@ install.packages(cran_packages)
 
 # 2. Install Bioconductor packages
 if (!require("BiocManager", quietly = TRUE)) {
-    install.packages("BiocManager")}
+    install.packages("BiocManager")
+}
 
 bioc_packages <- c("celldex", "SingleR", "org.Mm.eg.db", "clusterProfiler", "enrichplot", "ComplexHeatmap")
 BiocManager::install(bioc_packages)
@@ -87,7 +84,7 @@ Please download the raw matrix files for the following samples:
 ### 3. Expected Output
 Running the script will process the immune cell populations (including the appropriately annotated Endothelial cell subsets) and generate the quantitative figures used in the manuscript, including:
 * **Volcano Plot:** "MSC-EV effects on global immune cell" displaying global DEGs.
-* **Dot Plot (Figure 7d):** "Inflammatory regulation of MSC-EVs" tracking markers like *S100a8, S100a9, Lcn2* across BAMs, Active Neutrophils, B cells, Inflammatory Macrophages, and Monocytes.
+* **Dot Plot (Figure 7d):** "Inflammatory regulation of MSC-EVs" tracking markers like *S100a8*, *S100a9*, *Lcn2* across BAMs, Active Neutrophils, B cells, Inflammatory Macrophages, and Monocytes.
 * **UMAP Feature Plots (Figure 7e):** Spatial expression of target genes across Young, Old, and Old-EV groups.
 * **GO Bar Plots (Figure 7f):** Biological processes related to the alleviation of chronic inflammation and restoration of homeostasis.
 * **KEGG Chord Diagram (Figure 7g):** "Mechanisms of Rejuvenation by MSC-EV" visualizing enriched pathways (e.g., Autophagy, TNF/NF-kappa B signaling).
