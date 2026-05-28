@@ -1,8 +1,8 @@
 # Meningeal-lymphatics-as-a-gateway-for-extracellular-vesicle-brain-delivery
-Raw Mouse Meninges data and analysis code
-# [Project Title: e.g., Mouse Hippocampus Aging scRNA-seq Analysis]
 
-This repository contains the standalone R scripts and a demo dataset used for the analysis in the manuscript "[Your Manuscript Title]".
+# [Project Title: Meningeal-lymphatics-as-a-gateway-for-extracellular-vesicle-brain-delivery]
+
+This repository contains the standalone R scripts used for the analysis in the manuscript "[Meningeal-lymphatics-as-a-gateway-for-extracellular-vesicle-brain-delivery".
 
 ## 1. System Requirements
 
@@ -61,32 +61,37 @@ BiocManager::install(bioc_packages)
 
 ## 3 & 4. Instructions for Use and Reproduction
 
-Due to the large size of the raw datasets, we do not provide a subsetted demo dataset in this repository. Instead, users and reviewers can fully reproduce the manuscript's results by downloading the complete datasets from public repositories.
+Due to the large size of the raw datasets, we do not provide a subsetted demo dataset in this repository. Instead, users and reviewers can fully reproduce the manuscript's results by downloading the complete datasets from public repositories and running the provided pipeline.
 
 ### 1. Data Download (For Reviewers)
 The single-cell RNA sequencing data for the mouse meninges (Young, Old, and Old-EV groups) has been deposited in the Gene Expression Omnibus (GEO) under the accession number **[GSE333240](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE333240)**.
 
 > **Note to Reviewers:** The GEO dataset is currently on hold until publication. To access the raw data, please visit the link above and enter the private access token: **`szcbmaiohtobvwb`**
 
-Please download the `barcodes.tsv`, `features.tsv`, and `matrix.mtx` files for the following samples and place them in the `data/raw/` directory:
+Please download the raw matrix files for the following samples:
 * GSM9759670: Young Mouse Meninges
 * GSM9759671: Old Mouse Meninges
 * GSM9759672: Old-EV Mouse Meninges
 
-*(Note: LC/MS data from PRIDE can be downloaded and placed in the `data/raw/` directory following similar steps. Accession: [Insert PRIDE Accession])*
-
 ### 2. Instructions to Run
-1. Clone this repository to your local machine or HPC environment.
-2. Ensure all downloaded GEO and PRIDE data files are correctly placed in the `data/raw/` folder.
-3. Open the main analysis script (e.g., `main_analysis.R`) in RStudio.
-4. Execute the script sequentially. 
+1. Clone this repository to your local machine.
+2. Ensure all downloaded GEO data files are correctly placed in your designated local folders.
+3. Open the main analysis script (`Meningeal-lymphatics-as-a-gateway-for-extracellular-vesicle-brain-delivery.R`) in RStudio.
+4. Under the **USER CONFIGURATION** section (Lines 22-29), modify the following directory paths to match where you saved the downloaded datasets:
+   * `DIR_YOUNG <- "your_directory_path/Young"`
+   * `DIR_OLD <- "your_directory_path/Old"`
+   * `DIR_OLDEV <- "your_directory_path/Old-EV"`
+   * `FILE_DEG_RESULTS <- "your_directory_path/rawdata.csv"`
+5. Execute the script sequentially from top to bottom.
 
 ### 3. Expected Output
-Running the script will generate the following outputs in the `results/` folder:
-* Quality control plots
-* UMAP dimension reduction visualizations (e.g., cell type clustering including Endothelial cells)
-* Differentially Expressed Genes (DEG) tables and Gene Ontology (GO) pathway enrichment results.
+Running the script will process the immune cell populations (including the appropriately annotated Endothelial cell subsets) and generate the quantitative figures used in the manuscript, including:
+* **Volcano Plot:** "MSC-EV effects on global immune cell" displaying global DEGs.
+* **Dot Plot (Figure 7d):** "Inflammatory regulation of MSC-EVs" tracking markers like *S100a8, S100a9, Lcn2* across BAMs, Active Neutrophils, B cells, Inflammatory Macrophages, and Monocytes.
+* **UMAP Feature Plots (Figure 7e):** Spatial expression of target genes across Young, Old, and Old-EV groups.
+* **GO Bar Plots (Figure 7f):** Biological processes related to the alleviation of chronic inflammation and restoration of homeostasis.
+* **KEGG Chord Diagram (Figure 7g):** "Mechanisms of Rejuvenation by MSC-EV" visualizing enriched pathways (e.g., Autophagy, TNF/NF-kappa B signaling).
 
 ### 4. Expected Run Time
-Processing the full dataset requires substantial computational resources.
-* **Expected run time:** Approximately [e.g., 1-2 hours] on a standard machine with 32GB+ RAM.
+Processing the full Seurat objects and running downstream enrichment tools requires substantial computational resources.
+* **Expected run time:** Approximately 1-2 hours on a standard machine with at least 32GB RAM.
