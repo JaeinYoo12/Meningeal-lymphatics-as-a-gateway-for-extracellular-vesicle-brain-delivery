@@ -356,7 +356,7 @@ print(p_fig7e)
 
 
 #####----- 10. GO Biological Process Enrichment Analysis (Figure 7f) -----#####
-deg_data <- read.csv("your path/Meninges DE Result")
+deg_data <- read.csv("your path/Meninges DE Result.csv")
 
 target_cells_list <- c("BAMs", "Active_Neutrophils", "B cells", "Macro_Inflammatory", "Monocytes")
 
