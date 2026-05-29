@@ -26,10 +26,6 @@ DIR_OLD   <- "./your directory"
 DIR_OLDEV <- "./your directory"
 
 
-# Pre-computed DEG results file path for GO/KEGG downstream analysis
-FILE_DEG_RESULTS <- "./rawdata.csv"
-
-
 #####----- 1. Data Loading and Seurat Object Creation -----#####
 
 young_data <- Read10X(DIR_YOUNG)
