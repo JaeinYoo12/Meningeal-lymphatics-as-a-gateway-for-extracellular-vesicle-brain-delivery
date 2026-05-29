@@ -74,11 +74,12 @@ Please download the raw matrix files for the following samples:
 1. Clone this repository to your local machine.
 2. Ensure all downloaded GEO data files are correctly placed in your designated local folders.
 3. Open the main analysis script (`Meningeal-lymphatics-as-a-gateway-for-extracellular-vesicle-brain-delivery.R`) in RStudio.
-4. Under the **USER CONFIGURATION** section (Lines 22-29), modify the following directory paths to match where you saved the downloaded datasets:
+4. Under the **USER CONFIGURATION** section (Lines 22-29 and 359), modify the following directory paths to match where you saved the downloaded datasets:
+5. 'Meninges DE Result.CSV' can be downloaded in Meninges DE Result.zip 
    * `DIR_YOUNG <- "your_directory_path/Young"`
    * `DIR_OLD <- "your_directory_path/Old"`
    * `DIR_OLDEV <- "your_directory_path/Old-EV"`
-   * `FILE_DEG_RESULTS <- "your_directory_path/rawdata.csv"`
+   * `deg_data <- read.csv("your path/Meninges DE Result")"`
 5. Execute the script sequentially from top to bottom.
 
 ### 3. Expected Output
