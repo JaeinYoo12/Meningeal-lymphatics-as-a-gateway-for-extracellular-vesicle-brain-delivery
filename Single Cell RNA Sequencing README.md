@@ -1,7 +1,5 @@
 # Meningeal-lymphatics-as-a-gateway-for-extracellular-vesicle-brain-delivery
 
-# Meningeal-lymphatics-as-a-gateway-for-extracellular-vesicle-brain-delivery
-
 This repository contains the standalone R scripts used for the analysis in the manuscript "Meningeal-lymphatics-as-a-gateway-for-extracellular-vesicle-brain-delivery".
 
 ## 1. System Requirements
