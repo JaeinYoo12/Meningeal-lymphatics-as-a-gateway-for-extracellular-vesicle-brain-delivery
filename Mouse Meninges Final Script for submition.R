@@ -356,11 +356,7 @@ print(p_fig7e)
 
 
 #####----- 10. GO Biological Process Enrichment Analysis (Figure 7f) -----#####
-if(file.exists(FILE_DEG_RESULTS)) {
-  deg_data <- read.csv(FILE_DEG_RESULTS)
-} else {
-  stop("Pre-computed DEG results file not found. Ensure FILE_DEG_RESULTS is correct.")
-}
+deg_data <- read.csv("your path/Meninges DE Result")
 
 target_cells_list <- c("BAMs", "Active_Neutrophils", "B cells", "Macro_Inflammatory", "Monocytes")
 
@@ -370,22 +366,30 @@ merged_rescue_genes <- deg_data %>%
   pull(Gene) %>%
   unique()
 
+
 gene_entrez_go <- bitr(merged_rescue_genes, fromType = "SYMBOL", toType = "ENTREZID", OrgDb = org.Mm.eg.db)
 
 go_merged <- enrichGO(gene = gene_entrez_go$ENTREZID,
-                      OrgDb = org.Mm.eg.db, ont = "BP",
-                      pAdjustMethod = "BH", pvalueCutoff = 0.05, readable = TRUE)
+                      OrgDb = org.Mm.eg.db,
+                      ont = "BP",
+                      pAdjustMethod = "BH",
+                      pvalueCutoff = 0.05,
+                      readable = TRUE)
 
-go_plot_df <- go_merged@result %>%
-  mutate(Term_Size = as.numeric(sub("/.*", "", BgRatio)),
-         RichFactor = Count / Term_Size,
-         Log10Pval = -log10(p.adjust))
+go_plot_df <- go_merged@result
+
+plot_data <- go_plot_df %>%
+  mutate(
+    Term_Size = as.numeric(sub("/.*", "", BgRatio)),
+    RichFactor = Count / Term_Size,
+    Log10Pval = -log10(p.adjust)
+  )
 
 keywords_inflammation <- c("response to biotic", "defense response", "response to bacterium", "oxidative stress", "inflammatory")
 keywords_regulation   <- c("leukocyte migration", "chemotaxis", "innate immune response", "receptor signaling", "activation of innate", "pattern recognition")
 keywords_homeostasis  <- c("homeostasis", "apoptotic", "secretion", "transport", "metabolic", "insulin", "Golgi")
 
-plot_data_go <- go_plot_df %>%
+plot_data <- plot_data %>%
   mutate(Category = case_when(
     str_detect(Description, paste(keywords_inflammation, collapse = "|")) ~ "Alleviation of\nChronic Inflammation",
     str_detect(Description, paste(keywords_regulation, collapse = "|")) ~ "Regulation of\nImmune Signaling",
@@ -393,18 +397,27 @@ plot_data_go <- go_plot_df %>%
     TRUE ~ "Others" 
   )) %>%
   filter(Category != "Others" & p.adjust < 0.05) %>%
-  group_by(Category) %>% arrange(p.adjust) %>% slice_head(n = 5) %>% ungroup()
+  group_by(Category) %>%
+  arrange(p.adjust) %>%        
+  slice_head(n = 5) %>%        
+  ungroup()
+
 
 cat_levels <- c("Alleviation of\nChronic Inflammation", "Regulation of\nImmune Signaling", "Restoration of\nHomeostasis")
-plot_data_go$Category <- factor(plot_data_go$Category, levels = cat_levels)
-plot_data_go$Description <- factor(plot_data_go$Description, levels = rev(unique(plot_data_go$Description)))
+plot_data$Category <- factor(plot_data$Category, levels = cat_levels)
+plot_data$Description <- factor(plot_data$Description, levels = rev(unique(plot_data$Description)))
 
-plot_data_go <- plot_data_go %>%
-  mutate(Plot_Count = pmax(100, pmin(Count, 175)),
-         Plot_RichFactor = pmax(0.325, pmin(RichFactor, 0.450)))
+plot_data <- plot_data %>%
+  mutate(
+    Plot_Count = pmax(100, pmin(Count, 175)),
+    Plot_RichFactor = pmax(0.325, pmin(RichFactor, 0.450))
+  )
 
-x_min <- min(13, min(plot_data_go$Log10Pval) * 0.85)
-x_max <- max(32, max(plot_data_go$Log10Pval) * 1.05)
+
+x_min <- min(13, min(plot_data$Log10Pval) * 0.85)
+x_max <- max(32, max(plot_data$Log10Pval) * 1.05)
+
+
 
 make_go_plot <- function(df, cat_name, strip_color, show_x_axis = FALSE) {
   sub_df <- df %>% filter(Category == cat_name)
@@ -412,11 +425,24 @@ make_go_plot <- function(df, cat_name, strip_color, show_x_axis = FALSE) {
   p <- ggplot(sub_df, aes(x = Log10Pval, y = Description)) +
     geom_point(aes(size = Plot_Count, color = Plot_RichFactor)) +
     facet_grid(Category ~ ., scales = "free_y", space = "free_y") +
-    scale_color_gradientn(colors = c("#2F358F", "#9A1B81", "#E61434"), breaks = c(0.325, 0.350, 0.375, 0.400, 0.425, 0.450),
-                          name = "Rich Factor", guide = guide_colorbar(order = 1, barheight = unit(3, "cm"), ticks.colour = "white")) +
-    scale_size_continuous(range = c(3, 9), breaks = c(100, 125, 150, 175), name = "Gene Count", guide = guide_legend(order = 2, override.aes = list(color = "black"))) +
+    
+    scale_color_gradientn(
+      colors = c("#2F358F", "#9A1B81", "#E61434"), 
+      breaks = c(0.325, 0.350, 0.375, 0.400, 0.425, 0.450),
+      name = "Rich Factor",
+      guide = guide_colorbar(order = 1, barheight = unit(3, "cm"), ticks.colour = "white")
+    ) +
+    
+    scale_size_continuous(
+      range = c(3, 9), 
+      breaks = c(100, 125, 150, 175),
+      name = "Gene Count",
+      guide = guide_legend(order = 2, override.aes = list(color = "black"))
+    ) +
+    
     scale_x_continuous(breaks = c(15, 20, 25, 30)) +
     coord_cartesian(xlim = c(x_min, x_max)) + 
+    
     theme_bw() +
     theme(
       axis.title.y = element_blank(),
@@ -437,17 +463,25 @@ make_go_plot <- function(df, cat_name, strip_color, show_x_axis = FALSE) {
   return(p)
 }
 
-p1_go <- make_go_plot(plot_data_go, "Alleviation of\nChronic Inflammation", "#92C5DE", show_x_axis = FALSE)
-p2_go <- make_go_plot(plot_data_go, "Regulation of\nImmune Signaling", "#A1D99B", show_x_axis = FALSE)     
-p3_go <- make_go_plot(plot_data_go, "Restoration of\nHomeostasis", "#C994C7", show_x_axis = TRUE)          
+p1 <- make_go_plot(plot_data, "Alleviation of\nChronic Inflammation", "#92C5DE", show_x_axis = FALSE)
+p2 <- make_go_plot(plot_data, "Regulation of\nImmune Signaling", "#A1D99B", show_x_axis = FALSE)     
+p3 <- make_go_plot(plot_data, "Restoration of\nHomeostasis", "#C994C7", show_x_axis = TRUE)          
 
-p_fig7f <- (p1_go / p2_go / p3_go) + plot_layout(guides = 'collect') + 
-  plot_annotation(title = "GO : Biological Process of MSC-EVs treatment", 
-                  theme = theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 18))) & 
-  theme(legend.position = "right", legend.box = "vertical", 
-        legend.title = element_text(size = 11, face = "bold"), legend.text = element_text(size = 10))
+p_fig7f <- (p1 / p2 / p3) + 
+  plot_layout(guides = 'collect') + 
+  plot_annotation(
+    title = "GO : Biological Process of MSC-EVs treatment",
+    theme = theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 18))
+  ) & 
+  theme(
+    legend.position = "right",
+    legend.box = "vertical", 
+    legend.title = element_text(size = 11, face = "bold"),
+    legend.text = element_text(size = 10)
+  )
 
 print(p_fig7f)
+
 
 
 #####----- 11. KEGG Pathway Chord Diagram (Figure 7g) -----#####
@@ -520,6 +554,10 @@ circos.trackPlotRegion(track.index = 1, panel.fun = function(x, y) {
     circos.text(mean(xlim), ylim[1] + 0.3, sector.name, facing = "clockwise", niceFacing = TRUE, adj = c(0, 0.5), cex = 0.8, font = 3)
   }
 }, bg.border = NA)
+
+title("Mechanisms of Rejuvenation by MSC-EV", cex.main = 1.5)
+lgd_gene = Legend(title = "Log2FC", col_fun = col_fun_gene, at = c(-2, 0, 2))
+draw(lgd_gene, x = unit(0.9, "npc"), y = unit(0.2, "npc"), just = c("center", "center"))
 
 title("Mechanisms of Rejuvenation by MSC-EV", cex.main = 1.5)
 lgd_gene = Legend(title = "Log2FC", col_fun = col_fun_gene, at = c(-2, 0, 2))
