@@ -80,7 +80,7 @@ Please download the raw matrix files for the following samples:
    * `DIR_OLD <- "your_directory_path/Old"`
    * `DIR_OLDEV <- "your_directory_path/Old-EV"`
    * `deg_data <- read.csv("your path/Meninges DE Result")"`
-5. Execute the script sequentially from top to bottom.
+6. Execute the script sequentially from top to bottom.
 
 ### 3. Expected Output
 Running the script will process the immune cell populations (including the appropriately annotated Endothelial cell subsets) and generate the quantitative figures used in the manuscript, including:
