@@ -1,8 +1,3 @@
-# Script Name: Single-Cell RNA-Seq Analysis of Mouse Meninges Immune Cells
-# Description: Full analysis pipeline including preprocessing, integration, 
-#              clustering, DEG analysis, GO/KEGG enrichment, and visualization.
-# Target Journal: Nature Communications
-
 #####----- 0. Package Loading and Initialization -----#####
 library(Seurat)
 library(dplyr)
