@@ -25,7 +25,6 @@ DIR_YOUNG <- "./your directory"
 DIR_OLD   <- "./your directory"
 DIR_OLDEV <- "./your directory"
 
-set.seed(1234)
 
 # Pre-computed DEG results file path for GO/KEGG downstream analysis
 FILE_DEG_RESULTS <- "./rawdata.csv"
