@@ -50,6 +50,15 @@ BiocManager::install(bioc_packages)
 
 ## 3 & 4. Instructions for Use and Reproduction
 1. Data Source (For Reviewers & Users)
+Raw LC/MS Data (PRIDE):
+The raw LC-MS/MS proteomics data associated with this manuscript have been deposited to the ProteomeXchange Consortium via the PRIDE partner repository with the dataset identifier PXD079034.
+
+Note to Reviewers: The PRIDE dataset is currently on hold until publication. To access the raw data during the peer review process, please log in to the PRIDE website using the following details:
+
+Project accession: PXD079034
+
+Token: yW9qu0IJw9iu
+
 The complete raw proteomic expression dataset containing the HEK and MSC samples is directly provided within this GitHub repository. Reviewers and users can utilize EV proteomic Hek vs MSC.xlsx as the primary raw data file to fully replicate and run the analytical pipeline.
 
 2. Instructions to Run
